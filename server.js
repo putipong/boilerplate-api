@@ -8,15 +8,18 @@ import express from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import compression from 'compression';
+import DatabaseClient from './src/services/DatabaseService';
 import _ from 'lodash';
 import path from 'path';
 
 import baseRoute from './src/routes/index';
 
 class ExpressServer {
-	constructor( config ) {
+	constructor( conf ) {
+		this.config = require( conf );
 		this.app = express();
-		this.config = config || {};
+
+		this.db = new DatabaseClient( this.config.mongo );
 	}
 
 	init() {
@@ -42,7 +45,7 @@ class ExpressServer {
 
 if ( require.main === module ) {
 	try {
-		new ExpressServer().init().then( instance => instance.start() );
+		new ExpressServer( './api-config.json' ).init().then( instance => instance.start() );
 	} catch (e) {
 		console.log( "Unable to start server.", e );
 	}
