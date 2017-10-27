@@ -1,25 +1,30 @@
 /**
  * Created by mattputipong on 10/19/17.
  */
+
 "use strict";
 
 import Promise from 'bluebird';
 import express from 'express';
+import morgan from 'morgan';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import compression from 'compression';
-import DatabaseClient from './src/services/DatabaseService';
-import _ from 'lodash';
-import path from 'path';
+import { databaseService } from './src/services/DatabaseService';
 
 import baseRoute from './src/routes/index';
+import api from './src/routes/api';
 
 class ExpressServer {
 	constructor( conf ) {
 		this.config = require( conf );
 		this.app = express();
 
-		this.db = new DatabaseClient( this.config.mongo );
+		this.db = databaseService;
+
+		if ( process.env.NODE_ENV === 'prod' ) {
+			ExpressServer.disableLogger();
+		}
 	}
 
 	init() {
@@ -28,18 +33,27 @@ class ExpressServer {
 			this.app.use( cors() );
 			this.app.use( bodyParser.urlencoded( { extended: true } ) );
 			this.app.use( bodyParser.json() );
+			this.app.use( morgan( 'dev' ) );
 
 			this.port = this.config.port || 8080;
 
 			this.app.use( '/', baseRoute );
+			this.app.use( '/api', api );
 
 			res( this );
 		} );
 	}
 
 	start() {
-		this.app.listen( this.port );
+		this.db.connect( err => {
+			this.app.listen( this.port );
+		} );
+
 		console.log( 'App listening on port ' + this.port );
+	}
+
+	static disableLogger() {
+		console.log = function() {};
 	}
 }
 
