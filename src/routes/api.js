@@ -4,10 +4,11 @@
 
 'use strict';
 
-import express from 'express';
-import jwt from 'express-jwt';
-import { secret } from '../config/api-config.json';
-import usersRoute from './users';
+const
+	express    = require( 'express' ),
+	jwt        = require( 'express-jwt' ),
+	{ secret } = require( '../../config.json' ),
+	usersRoute = require( './users' );
 
 const router = express.Router();
 
@@ -15,4 +16,4 @@ router.use( jwt( { secret, requestProperty : 'auth' } ) );
 
 router.use( '/users', usersRoute );
 
-export default router;
+module.exports = router;

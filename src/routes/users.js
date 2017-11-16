@@ -4,16 +4,17 @@
 
 'use strict';
 
-import express from 'express';
-import { userService } from '../services/UserService';
-import Guard from 'express-jwt-permissions';
+const
+	express         = require( 'express' ),
+	{ userService } = require( '../services/UserService' ),
+	Guard           = require( 'express-jwt-permissions' );
 
-const router = express.Router();
-const users  = userService;
-const guard  = Guard( {
-	requestProperty : 'auth',
-	permissionsProperty : 'permissions'
-} );
+const router = express.Router(),
+      users  = userService,
+      guard  = Guard( {
+	      requestProperty     : 'auth',
+	      permissionsProperty : 'permissions'
+      } );
 
 router.put( '/createUser', guard.check( 'user:create' ), ( req, res ) => {
 	const { username, password } = req.body;
@@ -25,7 +26,7 @@ router.put( '/createUser', guard.check( 'user:create' ), ( req, res ) => {
 	const params = {
 		username,
 		password,
-		permissions: [
+		permissions : [
 			'user:read'
 		]
 	};
@@ -48,7 +49,7 @@ router.put( '/createAdmin', guard.check( [ 'admin', 'user:create' ] ), ( req, re
 	const params = {
 		username,
 		password,
-		permission: [
+		permission : [
 			'admin',
 			'user:read',
 			'user:create'
@@ -71,4 +72,4 @@ router.get( '/:username', guard.check( 'user:read' ), ( req, res ) => {
 		} );
 } );
 
-export default router;
+module.exports = router;

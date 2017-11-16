@@ -2,43 +2,45 @@
  * Created by mattputipong on 10/19/17.
  */
 
-"use strict";
+'use strict';
 
-import Promise from 'bluebird';
-import express from 'express';
-import morgan from 'morgan';
-import cors from 'cors';
-import bodyParser from 'body-parser';
-import compression from 'compression';
-import { databaseService } from './src/services/DatabaseService';
+const
+	express             = require( 'express' ),
+	cors                = require( 'cors' ),
+	morgan              = require( 'morgan' ),
+	bodyParser          = require( 'body-parser' ),
+	compression         = require( 'compression' ),
+	{ databaseService } = require( './src/services/DatabaseService' ),
+	baseRoute           = require( './src/routes/index' ),
+	api                 = require( './src/routes/api' );
 
-import baseRoute from './src/routes/index';
-import api from './src/routes/api';
-
-class ExpressServer {
-	constructor( conf ) {
-		this.config = require( conf );
-		this.app = express();
+class Server {
+	constructor( config ) {
+		this.config  = typeof config === 'string' ? require( config ) : config;
+		this.express = express();
 
 		this.db = databaseService;
 
 		if ( process.env.NODE_ENV === 'prod' ) {
-			ExpressServer.disableLogger();
+			Server.disableLogger();
 		}
 	}
 
 	init() {
 		return new Promise( res => {
-			this.app.use( compression() );
-			this.app.use( cors() );
-			this.app.use( bodyParser.urlencoded( { extended: true } ) );
-			this.app.use( bodyParser.json() );
-			this.app.use( morgan( 'dev' ) );
+			this.express.locals.server = this;
+			this.express.locals.config = this.config;
+
+			this.express.use( compression() );
+			this.express.use( cors() );
+			this.express.use( bodyParser.urlencoded( { extended : true } ) );
+			this.express.use( bodyParser.json() );
+			this.express.use( morgan( 'dev' ) );
 
 			this.port = this.config.port || 8080;
 
-			this.app.use( '/', baseRoute );
-			this.app.use( '/api', api );
+			this.express.use( '/', baseRoute );
+			this.express.use( '/api', api );
 
 			res( this );
 		} );
@@ -46,21 +48,22 @@ class ExpressServer {
 
 	start() {
 		this.db.connect( err => {
-			this.app.listen( this.port );
+			this.express.listen( this.port );
 		} );
 
 		console.log( 'App listening on port ' + this.port );
 	}
 
 	static disableLogger() {
-		console.log = function() {};
+		console.log = function() {
+		};
 	}
 }
 
 if ( require.main === module ) {
 	try {
-		new ExpressServer( './api-config.json' ).init().then( instance => instance.start() );
-	} catch (e) {
-		console.log( "Unable to start server.", e );
+		new Server( './config.json' ).init().then( instance => instance.start() ).catch( err => console.log( err ) );
+	} catch ( e ) {
+		console.log( 'Unable to start server.', e );
 	}
 }

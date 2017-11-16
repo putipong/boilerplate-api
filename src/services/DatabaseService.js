@@ -2,22 +2,23 @@
  * Created by mattputipong on 10/19/17.
  */
 
-"use strict";
+'use strict';
 
-import mongo from 'mongodb';
-import conf from '../../api-config.json';
+const
+	mongo = require( 'mongodb' ),
+	conf  = require( '../../config.json' );
 
 class DatabaseService {
 	constructor( collection ) {
 		this.config = conf.mongo;
 
 		this.client = mongo.MongoClient;
-		this.db = null;
+		this.db     = null;
 	}
 
-	set collection( col ) {
-		this.collection = col;
-	}
+	// set collection( col ) {
+	// 	this.collection = col;
+	// }
 
 	connect( callback ) {
 		this.client.connect( this.config.url, ( err, db ) => {
@@ -44,4 +45,4 @@ class DatabaseService {
 	}
 }
 
-export let databaseService = new DatabaseService();
+exports.databaseService = new DatabaseService();

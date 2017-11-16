@@ -4,8 +4,9 @@
 
 "use strict";
 
-import crypto from 'crypto';
-import { databaseService } from '../services/DatabaseService';
+const
+	crypto = require( 'crypto' ),
+	{ databaseService } = require( '../services/DatabaseService' );
 
 class UserService {
 	constructor() {
@@ -35,4 +36,4 @@ class UserService {
 	}
 }
 
-export let userService = new UserService();
+exports.userSevice = new UserService();
