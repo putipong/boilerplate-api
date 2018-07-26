@@ -2,4 +2,4 @@
 
 cd /home/ubuntu/boilerplate-api
 
-pm2 stop server.js
+pm2 kill
