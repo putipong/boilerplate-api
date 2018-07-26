@@ -2,4 +2,4 @@
 
 cd /home/ubuntu/boilerplate-api
 
-npm i 
+npm i
