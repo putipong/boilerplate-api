@@ -15,7 +15,7 @@ hooks:
       timeout: 180
       runas: ubuntu
   Install:
-      -location: scripts/install.sh
+      - location: scripts/install.sh
       timeout: 180
       runas: ubuntu
   ApplicationStart:
