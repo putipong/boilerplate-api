@@ -11,10 +11,12 @@ permissions:
       - directory
 hooks:
   ApplicationStop:
+    - location: deregister_from_elb.sh
     - location: scripts/stop_server.sh
       timeout: 180
       runas: ubuntu
   ApplicationStart:
     - location: scripts/start_server.sh
+    - location: register_with_elb.sh
       timeout: 180
       runas: ubuntu
