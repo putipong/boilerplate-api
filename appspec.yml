@@ -13,7 +13,7 @@ hooks:
   ApplicationStop:
     - location: scripts/deregister_from_elb.sh
       timeout: 300
-      root: ubuntu
+      runas: root
     - location: scripts/stop_server.sh
       timeout: 180
       runas: ubuntu
@@ -23,4 +23,4 @@ hooks:
       runas: ubuntu
     - location: scripts/register_with_elb.sh
       timeout: 180
-      root: ubuntu
+      runas: root
