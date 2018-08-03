@@ -11,7 +11,7 @@ permissions:
       - directory
 hooks:
   ApplicationStop:
-    - location: deregister_from_elb.sh
+    - location: scripts/deregister_from_elb.sh
     - location: scripts/stop_server.sh
       timeout: 180
       runas: ubuntu
