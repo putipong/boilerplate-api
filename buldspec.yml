@@ -13,8 +13,8 @@ phases:
       - echo Logging in to Amazon ECR...
       - aws --version
       - $(aws ecr get-login --region $AWS_DEFAULT_REGION --no-include-email)
-      - REPOSITORY_URI=426318416515.dkr.ecr.us-east-1.amazonaws.com/docker-test-2
-      - IMAGE_NAME=docker-test-2
+      - REPOSITORY_URI=426318416515.dkr.ecr.us-east-2.amazonaws.com/boilerplate-api-docker-repo
+      - IMAGE_NAME=boilerplate-api
       - IMAGE_TAG=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
   build:
     commands:
@@ -26,7 +26,12 @@ phases:
   post_build:
     commands:
       - echo Build completed on $(date)
+      - echo Pushing the Docker images...
+      - docker push $REPOSITORY_URI:latest
+      - docker push $REPOSITORY_URI:$IMAGE_TAG
+      - echo Writing image definitions file...
+      - printf '[{"name":"boilerplate-api","imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
 artifacts:
   files:
       - $BUILD_VERSION
-      - ecs.config.json
+      - imagedefinitions.json
