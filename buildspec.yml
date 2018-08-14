@@ -10,7 +10,8 @@ phases:
       - unzip awscli-bundle.zip
       - ./awscli-bundle/install -i /usr/local/aws -b /usr/local/bin/aws
       - aws --version
-      - npm install
+      - curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
+      - sudo apt-get install -y nodejs
       - npm install -g mocha
   pre_build:
     commands:
