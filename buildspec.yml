@@ -4,7 +4,6 @@ phases:
   install:
     commands:
       - apt-get update
-      - apt-get install python-pip -y
       - apt-get install python-dev -y
       - pip --version
       - python --version
