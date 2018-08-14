@@ -4,7 +4,8 @@ phases:
   install:
     commands:
       - apt-get update
-      - pip3 install --upgrade awscli
+      - apt-get install python-pip -y
+      - pip install awscli --upgrade --user
       - npm install -g mocha
   pre_build:
     commands:
