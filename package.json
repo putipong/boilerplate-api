@@ -4,7 +4,7 @@
     "description": "RESTful API using Node and Express.",
     "main": "server.js",
     "scripts": {
-        "test": "mocha",
+        "test": "echo \"Error: no test specified\"",
         "cucumber": "cucumber.js --compiler js:babel-core/register ./features -r ./steps",
         "dev": "NODE_ENV=dev nodemon --exec \"babel-node server.js\"",
         "prod": "NODE_ENV=prod babel-node server.js"
