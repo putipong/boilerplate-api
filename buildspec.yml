@@ -4,10 +4,10 @@ phases:
   install:
     commands:
       - apt-get update
-      - apt-get install python-dev -y
-      - pip --version
-      - python --version
-      - pip install awscli --upgrade --user
+      - curl "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip" -o "awscli-bundle.zip"
+      - unzip awscli-bundle.zip
+      - ./awscli-bundle/install -i /usr/local/aws -b /usr/local/bin/aws
+      - aws --version
       - npm install -g mocha
   pre_build:
     commands:
