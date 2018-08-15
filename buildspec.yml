@@ -27,8 +27,8 @@ phases:
     commands:
       - npm run test
       - BUILD_VERSION=$(npm pack -s)
-      - docker build -t $IMAGE_NAME:latest .
-      - docker tag $IMAGE_NAME:latest $REPOSITORY_URI:$IMAGE_TAG
+      - docker build -t $REPOSITORY_URI:latest .
+      - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$IMAGE_TAG
   post_build:
     commands:
       - echo Build completed on $(date)
