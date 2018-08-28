@@ -20,8 +20,8 @@ phases:
       - echo Logging in to Amazon ECR...
       - aws --version
       - $(aws ecr get-login --region us-east-2 --no-include-email)
-      - REPOSITORY_URI=426318416515.dkr.ecr.us-east-2.amazonaws.com/boilerplate-docker
-      - IMAGE_NAME=boilerplate-api
+      - REPOSITORY_URI=426318416515.dkr.ecr.us-east-2.amazonaws.com/boilerplate-api-docker
+      - IMAGE_NAME=boilerplate-api-docker
       - IMAGE_TAG=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
       - echo "$CODEBUILD_RESOLVED_SOURCE_VERSION"
       - echo "$CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7"
