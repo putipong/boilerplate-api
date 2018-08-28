@@ -1,21 +1,28 @@
+# Use Node runtime
 FROM node:9
 
-# Create app directory
-WORKDIR /home/ubuntu/boilerplate-api
+# create app directory
+WORKDIR /boilerplate-api
 
-# Install app dependencies
-# A wildcard is used  to ensure both package.json And package-lock.json are copied
-# Where available (npm@5+)
-# COPY package*.json ./
 
- RUN npm install
- # Run command "npm install"
+# Download node
+# RUN apt-get update -y
+# RUN apt-get install curl -y
+# RUN curl -sL https://deb.nodesource.com/setup_9.x | bash
+# RUN apt-get install nodejs -y
 
- #bundle app resource
-COPY . .
+# add all files from the *local* current directory into new work directory *inside container*
+ADD . /boilerplate-api
 
-# Open port 8080
+# Run command "npm install"
+RUN node -v
+RUN npm -v
+RUN ls -l
+RUN npm install
+
+# Open port 8080 
 EXPOSE 8080
 
 # Run command "npm start"
-CMD [ "npm", "start"]
+CMD ["npm", "run", "dev"]
+

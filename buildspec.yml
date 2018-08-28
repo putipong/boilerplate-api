@@ -20,13 +20,14 @@ phases:
       - echo Logging in to Amazon ECR...
       - aws --version
       - $(aws ecr get-login --region us-east-2 --no-include-email)
-      - REPOSITORY_URI=426318416515.dkr.ecr.us-east-2.amazonaws.com/boilerplate-api-docker-repo
+      - REPOSITORY_URI=426318416515.dkr.ecr.us-east-2.amazonaws.com/boilerplate-docker
       - IMAGE_NAME=boilerplate-api
       - IMAGE_TAG=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
+      - echo "$CODEBUILD_RESOLVED_SOURCE_VERSION"
+      - echo "$CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7"
   build:
     commands:
       - npm run test
-      - BUILD_VERSION=$(npm pack -s)
       - docker build -t $REPOSITORY_URI:latest .
       - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$IMAGE_TAG
   post_build:
@@ -39,5 +40,4 @@ phases:
       - printf '[{"name":"nginx","imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
 artifacts:
   files:
-      - $BUILD_VERSION
       - imagedefinitions.json
