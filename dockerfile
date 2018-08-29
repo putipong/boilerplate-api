@@ -20,9 +20,8 @@ RUN npm -v
 RUN ls -l
 RUN npm install
 
-# Open port 8080 
-EXPOSE 8080
+# proxy port from 8080 to 80
+ENV HTTPS_PROXY "https://10.0.0./16:80"
 
 # Run command "npm start"
 CMD ["npm", "run", "dev"]
-
